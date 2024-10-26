@@ -6,7 +6,12 @@ body {
 
 #timer {
     font-size: 48px;
-    margin-bottom: 20px;
+    margin: 10px auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    align-content: center;
+    background-color: lightgray;
 }
 
 button {
