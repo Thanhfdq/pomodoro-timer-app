@@ -8,21 +8,33 @@
   <link rel="stylesheet" href="css/mainWindow.css">
 </head>
 
-<body>  
+<body>
+  <div class="header-part">
+    <div id="fullProgress">
+      <div id="passedPomodoro"></div>
+    </div>
+    <div class="count-pomodoros-panel">
+      <p id="countpomodoro">0</p> /
+      <p id="longbreakinterval">4</p>
+    </div>
+  </div>
 
-  <h1>Pomodoro Timer</h1>
-  <h2 id="mode">pomodoro</h2>
-  countpomodoro:<div id="countpomodoro">4</div>
-  longbreakinterval:<div id="longbreakinterval">4</div>
-  autostart:<div id="autostart">true</div>
-  autobreak:<div id="autobreak">true</div>
-  <div id="timer">00:25</div>
+  <div class="containter">
+    <div class="potato">
+      <div id="mode">Pomodoro</div>
+      <p id="timer">00:25</p>
+      <button id="start">Start</button>
+      <button id="stop">Stop</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
 
-  <button id="start">Start</button>
-  <button id="stop">Stop</button>
-  <button id="reset">Reset</button>
+  <!-- <div class="footer-part">
+    autostart:<div id="autostart">true</div>
+    autobreak:<div id="autobreak">true</div>
+  </div> -->
 
-  <audio id="notification-sound" src="sounds/relaxing-guitar-loop-v5-245859.mp3"></audio>
+  <audio id="notification-sound" src="sounds/ting.mp3"></audio>
 
   <script src="./app.js"></script>
 </body>

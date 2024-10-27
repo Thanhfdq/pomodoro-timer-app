@@ -15,6 +15,11 @@ let POMODORO_DURATION = 25;
 let SHORT_BREAK = 5;
 let LONG_BREAK = 15;
 let LONG_BREAK_INTERVAL = 4; // Number of pomodoro before a long break
+// Color
+const POMODORO_COLOR = 'rgb(255, 87, 87)';
+const SHORT_BREAK_COLOR = 'lightgray';
+const LONG_BREAK_COLOR = 'black';
+
 
 // Setting: auto start
 let auto_start_break = true;
@@ -24,7 +29,9 @@ let time = POMODORO_DURATION; // Clock countdown the pomodoro first by default
 let interval;
 let isRunning = false;
 let currentMode = 0; // 0 is pomodoro, 1 is short break, and 2 is long break
-let pomodoroBeforeLongBreak = LONG_BREAK_INTERVAL // count the number of pomodoro done before
+let pomodoroBeforeLongBreak = LONG_BREAK_INTERVAL // count the number of pomodoro remaining before long break
+
+
 
 // Function to update the timer display
 function updateTimerDisplay() {
@@ -33,10 +40,10 @@ function updateTimerDisplay() {
     timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-function updateTimeStatus(){
-    mode.textContent = `${currentMode.toString()}`;
-    countPomodoro.textContent = `${pomodoroBeforeLongBreak.toString()}`;
-    longBreakInterval.textContent = `${LONG_BREAK_INTERVAL.toString()}`;
+function updateTimeStatus() {
+    mode.textContent = `${currentMode}` == 0 ? 'Pomodoro' : `${currentMode}` == 1 ? 'Short Break' : 'Long Break';
+    countPomodoro.textContent = `${LONG_BREAK_INTERVAL - pomodoroBeforeLongBreak}`;
+    longBreakInterval.textContent = `${LONG_BREAK_INTERVAL}`;
     autoStart.textContent = `${auto_start_pomodoro.toString()}`;
     autoBreak.textContent = `${auto_start_break.toString()}`;
 }
