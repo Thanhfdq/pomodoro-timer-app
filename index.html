@@ -24,16 +24,30 @@
       <div id="mode"></div>
       <div id="timer"></div>
     </div>
-    <!-- <button id="start">Start</button>
-    <button id="stop">Stop</button> -->
-    <button id="start-stop">Start</button>
     <button id="reset">Reset</button>
   </div>
 
-  <!-- <div class="footer-part">
-    autostart:<div id="autostart">true</div>
-    autobreak:<div id="autobreak">true</div>
-  </div> -->
+  <div class="footer-part">
+    <button id="setting-button">⚙️ Setting</button>
+    <div id="setting-items-group">
+      <div class="setting-block">
+        <label for="">Auto start pomodoro</label>
+        <label class="switch">
+          <input id="autostart" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="setting-block">
+        <label for="">Auto start break</label>
+        <label class="switch">
+          <input id="autobreak" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+
+
+  </div>
 
   <audio id="notification-sound" src="sounds/ting.mp3"></audio>
 
