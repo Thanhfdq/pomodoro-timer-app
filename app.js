@@ -14,10 +14,10 @@ let autoStart = document.getElementById('autostart');
 let autoBreak = document.getElementById('autobreak');
 
 // Set time
-let POMODORO_DURATION = 25;
-let SHORT_BREAK = 5;
-let LONG_BREAK = 15;
-let LONG_BREAK_INTERVAL = 1; // Number of pomodoro before a long break
+let pomodoroTime = 25;
+let shortBreakTime = 5;
+let longBreakTime = 15;
+let longBreakInterval = 2; // Number of pomodoro before a long break
 // Color
 const POMODORO_COLOR = 'rgb(255, 87, 87)';
 const SHORT_BREAK_COLOR = 'lightgray';
@@ -27,8 +27,8 @@ const LONG_BREAK_COLOR = 'black';
 let auto_start_break = true;
 let auto_start_pomodoro = true;
 
-let time = POMODORO_DURATION; // Clock countdown the pomodoro first by default
-let currentCountTime = POMODORO_DURATION; // Save the duration of current mode to calculate the percent of circle
+let time = pomodoroTime; // Clock countdown the pomodoro first by default
+let currentCountTime = pomodoroTime; // Save the duration of current mode to calculate the percent of circle
 let interval;
 let isRunning = false;
 let currentMode = 0; // 0 is pomodoro, 1 is short break, and 2 is long break
@@ -49,13 +49,12 @@ function updateTimerDisplay() {
 
 function updateTimeStatus() {
     mode.textContent = `${currentMode}` == 0 ? 'Pomodoro' : `${currentMode}` == 1 ? 'Short Break' : 'Long Break';
+    setTomatoColor();
     updateTimerDisplay();
     countPomodoroLabel.textContent = `${passedPomodoros}`;
-    passedPomodoroBar.style.width = 100 / LONG_BREAK_INTERVAL * passedPomodoros + '%';
-    longBreakIntervalLabel.textContent = `${LONG_BREAK_INTERVAL}`;
+    passedPomodoroBar.style.width = 100 / longBreakInterval * passedPomodoros + '%';
     // autoStart.textContent = `${auto_start_pomodoro.toString()}`;
     // autoBreak.textContent = `${auto_start_break.toString()}`;
-    setTomatoColor();
 }
 
 // Function to start the timer
@@ -64,12 +63,16 @@ function startTimer() {
         isRunning = true;
         updateButton();
         interval = setInterval(() => {
+            time--;
             if (time > 0) { // countinous countdown
-                time--;
                 updateTimerDisplay();
             } else { // end time block
                 notificationSound.play(); // Play a sound when time's up
                 changeMode();
+                //reset new session after a long break
+                if (passedPomodoros == longBreakInterval && currentMode != 2) {
+                    passedPomodoros = 0;
+                }
                 updateTimeStatus();
             }
         }, 1000);
@@ -88,9 +91,9 @@ function resetTimer() {
     isRunning = false;
     clearInterval(interval);
     countPomodoroLabel.textContent = `${passedPomodoros.toString}`;
-    longBreakIntervalLabel.textContent = `${LONG_BREAK_INTERVAL}`;
+    longBreakIntervalLabel.textContent = `${longBreakInterval}`;
     currentMode = 0;
-    time = POMODORO_DURATION; // Reset it to default time
+    time = pomodoroTime; // Reset it to default time
     //reset all event
     passedPomodoros = 0;
     updateTimeStatus();
@@ -101,26 +104,23 @@ function resetTimer() {
 function changeMode() {
     if (currentMode == 0) { // after a pomodoro
         passedPomodoros++;
-        if (passedPomodoros < LONG_BREAK_INTERVAL) {
+        if (passedPomodoros < longBreakInterval) {
             currentMode = 1;
-            time = SHORT_BREAK;
-            currentCountTime = SHORT_BREAK;
+            time = shortBreakTime;
+            currentCountTime = shortBreakTime;
         } else {
             currentMode = 2;
-            time = LONG_BREAK;
-            currentCountTime = LONG_BREAK;
-            //reset new session
-            passedPomodoros = 0;
+            time = longBreakTime;
+            currentCountTime = longBreakTime;
         }
         if (auto_start_break) {
             startTimer();
         }
     } else { // after a break
         currentMode = 0;
-        time = POMODORO_DURATION;
-        currentCountTime = POMODORO_DURATION
+        time = pomodoroTime;
+        currentCountTime = pomodoroTime
         if (auto_start_pomodoro) {
-            // updateTimeStatus();
             startTimer();
         }
     }
@@ -129,7 +129,7 @@ function changeMode() {
 function setTomatoColor() {
     if (currentMode == 0) {
         currentcolor = POMODORO_COLOR;
-        if (passedPomodoros == LONG_BREAK_INTERVAL - 1)
+        if (passedPomodoros == longBreakInterval - 1)
             nextcolor = LONG_BREAK_COLOR;
         else
             nextcolor = SHORT_BREAK_COLOR;
@@ -137,7 +137,7 @@ function setTomatoColor() {
         currentcolor = SHORT_BREAK_COLOR;
         nextcolor = POMODORO_COLOR;
     } else {
-        currentcolor = LONG_BREAK_INTERVAL;
+        currentcolor = LONG_BREAK_COLOR;
         nextcolor = POMODORO_COLOR;
     }
 }
