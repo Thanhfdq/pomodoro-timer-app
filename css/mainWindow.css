@@ -100,6 +100,9 @@ body {
 
 /* footer part */
 #setting-button{
+    border: none;
+    border-radius: 0 5px 0 0;
+    padding: 5px;
 }
 .footer-part {
     position: absolute;
