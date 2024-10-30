@@ -1,20 +1,20 @@
 // GET ELEMENTS
-//header part 
-let passedPomodoroBar = document.getElementById('passed-pomodoro');
-let countPomodoroLabel = document.getElementById('count-pomodoro');
-let longBreakIntervalLabel = document.getElementById('long-break-interval');
+//header part
+let passedPomodoroBar = document.getElementById("passed-pomodoro");
+let countPomodoroLabel = document.getElementById("count-pomodoro");
+let longBreakIntervalLabel = document.getElementById("long-break-interval");
 //tomato circle
-let tomatoCircle = document.getElementById('tomato')
-let mode = document.getElementById('mode');
-let timerElement = document.getElementById('timer');
-let resetButton = document.getElementById('reset');
+let tomatoCircle = document.getElementById("tomato");
+let mode = document.getElementById("mode");
+let timerElement = document.getElementById("timer");
+let resetButton = document.getElementById("reset");
 //setting elements
-let settingButton = document.getElementById('setting-button');
-let settingItemsGroup = document.getElementById('setting-items-group');
-let autoStartCheckbox = document.getElementById('autostart');
-let autoBreakCheckbox = document.getElementById('autobreak');
+let settingButton = document.getElementById("setting-button");
+let settingItemsGroup = document.getElementById("setting-items-group");
+let autoStartCheckbox = document.getElementById("autostart");
+let autoBreakCheckbox = document.getElementById("autobreak");
 //media elements
-let notificationSound = document.getElementById('notification-sound');
+let notificationSound = document.getElementById("notification-sound");
 
 // DEFAULT SETTINGS VALUE
 //time
@@ -23,9 +23,9 @@ let shortBreakTime = 5;
 let longBreakTime = 15;
 let longBreakInterval = 2; // Number of pomodoro before a long break
 //color
-let pomodoroColor = 'rgb(255, 87, 87)';
-let shortBreakColor = 'lightgray';
-let longBreakColor = 'darkslategray';
+let pomodoroColor = "rgb(255, 87, 87)";
+let shortBreakColor = "lightgray";
+let longBreakColor = "darkslategray";
 //auto
 let auto_start_break = false;
 let auto_start_pomodoro = false;
@@ -40,162 +40,166 @@ let passedPomodoros = 0; // count the number of pomodoros have completed
 let currentcolor = pomodoroColor;
 let nextcolor = shortBreakColor;
 
-
 // FUNCTIONS
 
 // To update the timer display (every second)
 function updateTimerDisplay() {
-    let minutes = Math.floor(time / 60);
-    let seconds = time % 60;
-    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    // Update colors display of tomato
-    tomatoCircle.style.backgroundImage = `conic-gradient(${nextcolor} ${(currentCountTime - time) / currentCountTime * 100 * 3.6}deg, ${currentcolor} 0`
+  let minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+  timerElement.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  // Update colors display of tomato
+  tomatoCircle.style.backgroundImage = `conic-gradient(${nextcolor} ${((currentCountTime - time) / currentCountTime) * 100 * 3.6}deg, ${currentcolor} 0`;
 }
 
 // To update new data status on screen (every time block)
 function updateDataDisplay() {
-    // update mode display
-    mode.textContent = `${currentMode}` == 0 ? 'Pomodoro' : `${currentMode}` == 1 ? 'Short Break' : 'Long Break';
-    setTomatoColor();
-    // Update passed pomodoros
-    countPomodoroLabel.textContent = `${passedPomodoros}`;
-    // Update numbers of pomodoro progress bar
-    passedPomodoroBar.style.width = 100 / longBreakInterval * passedPomodoros + '%';
+  // update mode display
+  mode.textContent =
+    `${currentMode}` == 0
+      ? "Pomodoro"
+      : `${currentMode}` == 1
+        ? "Short Break"
+        : "Long Break";
+  setTomatoColor();
+  // Update passed pomodoros
+  countPomodoroLabel.textContent = `${passedPomodoros}`;
+  // Update numbers of pomodoro progress bar
+  passedPomodoroBar.style.width =
+    (100 / longBreakInterval) * passedPomodoros + "%";
 }
 
 // To start the timer
 function startTimer() {
-    if (!isRunning) {
-        isRunning = true;
-        updateButton();
-        interval = setInterval(() => {
-            time--;
-            if (time == 0) { // end time block if time's up
-                notificationSound.play(); // Play a sound when time's up
-                changeMode();
-                checkAutoStartTimer();
-                //reset new session after finished a long break and before start new pomodoro
-                if (passedPomodoros == longBreakInterval && currentMode != 2) {
-                    passedPomodoros = 0;
-                }
-                updateDataDisplay();
-            }
-            //update timer every second
-            updateTimerDisplay();
-        }, 1000);
-    }
+  if (!isRunning) {
+    isRunning = true;
+    updateButton();
+    interval = setInterval(() => {
+      time--;
+      if (time == 0) {
+        // end time block if time's up
+        notificationSound.play(); // Play a sound when time's up
+        changeMode();
+        checkAutoStartTimer();
+        //reset new session after finished a long break and before start new pomodoro
+        if (passedPomodoros == longBreakInterval && currentMode != 2) {
+          passedPomodoros = 0;
+        }
+        updateDataDisplay();
+      }
+      //update timer every second
+      updateTimerDisplay();
+    }, 1000);
+  }
 }
 
 // To stop the timer
 function stopTimer() {
-    clearInterval(interval);
-    isRunning = false;
-    updateButton();
+  clearInterval(interval);
+  isRunning = false;
+  updateButton();
 }
 
 // To reset the timer
 function resetTimer() {
-    isRunning = false;
-    // reset all data
-    clearInterval(interval);
-    currentMode = 0; // Start Pomodoro by default
-    time = pomodoroTime;
-    passedPomodoros = 0;
-    // update display
-    countPomodoroLabel.textContent = `${passedPomodoros.toString}`;
-    updateDataDisplay();
-    updateTimerDisplay();
-    updateButton();
+  isRunning = false;
+  // reset all data
+  clearInterval(interval);
+  currentMode = 0; // Start Pomodoro by default
+  time = pomodoroTime;
+  passedPomodoros = 0;
+  // update display
+  countPomodoroLabel.textContent = `${passedPomodoros.toString}`;
+  updateDataDisplay();
+  updateTimerDisplay();
+  updateButton();
 }
 
 // To determind the next mode is a break or a pomodoro
 function changeMode() {
-    if (currentMode == 0) { // after a pomodoro
-        passedPomodoros++;
-        if (passedPomodoros < longBreakInterval) {
-            currentMode = 1;
-            time = shortBreakTime;
-            currentCountTime = shortBreakTime;
-        } else {
-            currentMode = 2;
-            time = longBreakTime;
-            currentCountTime = longBreakTime;
-        }
-    } else { // after a break
-        currentMode = 0;
-        time = pomodoroTime;
-        currentCountTime = pomodoroTime
+  if (currentMode == 0) {
+    // after a pomodoro
+    passedPomodoros++;
+    if (passedPomodoros < longBreakInterval) {
+      currentMode = 1;
+      time = shortBreakTime;
+      currentCountTime = shortBreakTime;
+    } else {
+      currentMode = 2;
+      time = longBreakTime;
+      currentCountTime = longBreakTime;
     }
+  } else {
+    // after a break
+    currentMode = 0;
+    time = pomodoroTime;
+    currentCountTime = pomodoroTime;
+  }
 }
 
-function checkAutoStartTimer(){
-    if(currentMode == 0){
-        if (auto_start_pomodoro) {
-            startTimer();
-        }else{
-            stopTimer();
-        }
-    }else{
-        if (auto_start_break) {
-            startTimer();
-        }else{
-            stopTimer();
-        }
+function checkAutoStartTimer() {
+  if (currentMode == 0) {
+    if (auto_start_pomodoro) {
+      startTimer();
+    } else {
+      stopTimer();
     }
+  } else {
+    if (auto_start_break) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+  }
 }
 
 // To change the color of tomato circle (every time block)
 function setTomatoColor() {
-    if (currentMode == 0) {
-        currentcolor = pomodoroColor;
-        if (passedPomodoros == longBreakInterval - 1)
-            nextcolor = longBreakColor;
-        else
-            nextcolor = shortBreakColor;
-    } else if (currentMode == 1) {
-        currentcolor = shortBreakColor;
-        nextcolor = pomodoroColor;
-    } else {
-        currentcolor = longBreakColor;
-        nextcolor = pomodoroColor;
-    }
+  if (currentMode == 0) {
+    currentcolor = pomodoroColor;
+    if (passedPomodoros == longBreakInterval - 1) nextcolor = longBreakColor;
+    else nextcolor = shortBreakColor;
+  } else if (currentMode == 1) {
+    currentcolor = shortBreakColor;
+    nextcolor = pomodoroColor;
+  } else {
+    currentcolor = longBreakColor;
+    nextcolor = pomodoroColor;
+  }
 }
 
 // To update button functionality based on state
 function updateButton() {
-    if (isRunning) {
-        // Remove 'startTimer' and add 'stopTimer' as the event listener
-        // tomatoCircle.style.boxShadow = 'none';
-        tomatoCircle.style.boxShadow = '5px 5px 20px black inset';
-        tomatoCircle.removeEventListener("click", startTimer);
-        tomatoCircle.addEventListener("click", stopTimer);
-        // startStopButton.textContent = "Stop";
-    } else {
-        // Remove 'stopTimer' and add 'startTimer' as the event listener
-        tomatoCircle.removeEventListener("click", stopTimer);
-        tomatoCircle.addEventListener("click", startTimer);
-        // startStopButton.textContent = "Start";
-        tomatoCircle.style.boxShadow = '10px 10px 20px gray';
-    }
+  if (isRunning) {
+    // Remove 'startTimer' and add 'stopTimer' as the event listener
+    // tomatoCircle.style.boxShadow = "5px 5px 20px black inset";
+    tomatoCircle.removeEventListener("click", startTimer);
+    tomatoCircle.addEventListener("click", stopTimer);
+    // startStopButton.textContent = "Stop";
+  } else {
+    // Remove 'stopTimer' and add 'startTimer' as the event listener
+    tomatoCircle.removeEventListener("click", stopTimer);
+    tomatoCircle.addEventListener("click", startTimer);
+    tomatoCircle.style.boxShadow = "10px 10px 20px gray";
+  }
 }
 
-function toogleAutoStart(){
-    auto_start_pomodoro = autoStartCheckbox.checked;
+function toogleAutoStart() {
+  auto_start_pomodoro = autoStartCheckbox.checked;
 }
-function toogleAutoBreak(){
-    auto_start_break = autoBreakCheckbox.checked;
+function toogleAutoBreak() {
+  auto_start_break = autoBreakCheckbox.checked;
 }
-function showHideSetting(){
-    if(settingItemsGroup.style.display == "none"){
-        settingItemsGroup.style.display = "flex";
-    }else{
-        settingItemsGroup.style.display = "none";
-    }
+function showHideSetting() {
+  if (settingItemsGroup.style.display == "none") {
+    settingItemsGroup.style.display = "flex";
+  } else {
+    settingItemsGroup.style.display = "none";
+  }
 }
 
 // To show default value at begin of program
 function showSettingData() {
-    longBreakIntervalLabel.textContent = `${longBreakInterval}`
+  longBreakIntervalLabel.textContent = `${longBreakInterval}`;
 }
 
 // START PROGRAM CALLED
@@ -205,8 +209,8 @@ updateButton();
 showHideSetting();
 
 // EVENT LISTENER FOR BUTTONS
-tomatoCircle.addEventListener('click', startTimer);
-resetButton.addEventListener('click', resetTimer);
-autoStartCheckbox.addEventListener('change', toogleAutoStart);
-autoBreakCheckbox.addEventListener('change', toogleAutoBreak);
-settingButton.addEventListener('click', showHideSetting);
+tomatoCircle.addEventListener("click", startTimer);
+resetButton.addEventListener("click", resetTimer);
+autoStartCheckbox.addEventListener("change", toogleAutoStart);
+autoBreakCheckbox.addEventListener("change", toogleAutoBreak);
+settingButton.addEventListener("click", showHideSetting);
