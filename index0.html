@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pomodoro Timer</title>
+        <link rel="stylesheet" href="css/mainWindow.css" />
+    </head>
+
+    <body>
+        <div class="header-part">
+            <button id="reset">Reset</button>
+            <div id="fullProgress">
+                <div id="passed-pomodoro"></div>
+            </div>
+            <div class="count-pomodoros-panel">
+                <p id="count-pomodoro"></p>
+                /
+                <p id="long-break-interval"></p>
+            </div>
+        </div>
+
+        <div class="containter">
+            <div id="tomato">
+                <div id="mode"></div>
+                <div id="timer"></div>
+            </div>
+        </div>
+
+        <div class="footer-part">
+            <button id="setting-button">⚙️ Setting</button>
+            <div id="setting-items-group">
+                <div class="setting-block">
+                    <label for="">Auto start pomodoro</label>
+                    <label class="switch">
+                        <input id="autostart" type="checkbox" />
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-block">
+                    <label for="">Auto start break</label>
+                    <label class="switch">
+                        <input id="autobreak" type="checkbox" />
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <audio id="notification-sound" src="sounds/ting.mp3"></audio>
+
+        <script src="./app.js"></script>
+    </body>
+</html>

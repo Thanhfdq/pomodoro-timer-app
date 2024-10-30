@@ -1,0 +1,54 @@
+.ruler-container {
+    width: 100%;
+    height: 100%;
+    overflow-x: scroll;
+    cursor: grab; /* Shows grabbable cursor */
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    user-select: none; /* Prevent text selection while dragging */
+}
+
+.ruler-container::-webkit-scrollbar {
+    display: none;
+}
+
+.ruler-container:active {
+    cursor: grabbing; /* Shows grabbing cursor when dragging */
+}
+
+.ruler {
+    position: relative;
+    height: 100%; /* Space for ticks and numbers */
+    /* Width will be set by JavaScript */
+}
+
+/* Small ticks */
+.tick-small {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    transform: translateX(-50%);
+    bottom: 0;
+}
+
+/* Big ticks */
+.tick-big {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background: white;
+    transform: translateX(-50%);
+    bottom: 0;
+}
+
+/* Numbers */
+.tick-label {
+    position: absolute;
+    transform: translateX(-50%);
+    bottom: 12px;
+    font-size: 20px;
+    font-weight: bold;
+}
