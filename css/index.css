@@ -53,20 +53,8 @@ body {
 }
 
 /* Timer display */
-.top-half {
-    width: 100%;
-    height: calc(50% - 2.5px);
-    position: relative;
-}
 .timer-display {
     position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.timer-numbers {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     height: 100%;
 }
@@ -80,6 +68,13 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+.top-half {
+    width: 100%;
+    height: calc(50% - 2.5px);
+    position: relative;
+    overflow: hidden;
+}
+
 .bottom-half {
     width: 100%;
     height: 50%;

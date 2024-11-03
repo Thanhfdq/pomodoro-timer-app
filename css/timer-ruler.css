@@ -1,28 +1,22 @@
-.ruler-container {
+.ruler-track {
+    position: relative;
+    bottom: 0;
     width: 100%;
     height: 100%;
-    overflow-x: scroll;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    cursor: grab; /* Shows grabbable cursor */
-
-    /* Hide scrollbar */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    user-select: none; /* Prevent text selection while dragging */
 }
-
-.ruler-container::-webkit-scrollbar {
-    display: none;
-}
-
-.ruler-container:active {
+.ruler-track:active {
     cursor: grabbing; /* Shows grabbing cursor when dragging */
 }
 
-.ruler {
+.ruler-thumb {
+    position: absolute;
+}
+
+.ruler-divider-panel {
     position: relative;
     height: 100%; /* Space for ticks and numbers */
     /* Width will be set by JavaScript */
+    background-color: rgba(0, 255, 255, 0.1);
 }
 
 /* Small ticks */
