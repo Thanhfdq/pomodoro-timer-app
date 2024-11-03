@@ -72,6 +72,8 @@ body {
     width: 100%;
     height: calc(50% - 2.5px);
     position: relative;
+    display: flex;
+    justify-content: center;
     overflow: hidden;
 }
 
