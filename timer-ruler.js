@@ -174,6 +174,5 @@ class TimeRuler {
     const currentLeft = parseFloat(this.rulerThumb.style.left) || 0;
     const newLeft = currentLeft + this.pixelsPerTick / 60;
     this.rulerThumb.style.left = `${newLeft}px`;
-    console.log(newLeft);
   }
 }

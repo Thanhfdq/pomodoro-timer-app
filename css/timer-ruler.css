@@ -28,7 +28,7 @@
     position: absolute;
     width: 3px;
     height: 3px;
-    background: white;
+    background: var(--text-color);
     transform: translateX(-50%);
     bottom: 0;
 }
@@ -38,7 +38,7 @@
     position: absolute;
     width: 5px;
     height: 10px;
-    background: white;
+    background: var(--text-color);
     transform: translateX(-50%);
     bottom: 0;
 }
