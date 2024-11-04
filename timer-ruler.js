@@ -1,11 +1,18 @@
 class TimeRuler {
-  constructor(rulerDividerPanel, rulerThumb, rulerTrack, scaleLimit) {
+  constructor(
+    rulerDividerPanel,
+    rulerThumb,
+    rulerTrack,
+    scaleLimit,
+    pixelsPerTick,
+    pixelPerBigTick,
+  ) {
     this.rulerDividerPanel = rulerDividerPanel;
     this.rulerThumb = rulerThumb;
     this.rulerTrack = rulerTrack;
     this.scaleLimit = scaleLimit; // in minutes
-    this.pixelsPerTick = 15; // gap between ticks
-    this.minutesPerBigTick = 5; // every 5 minutes for big tick
+    this.pixelsPerTick = pixelsPerTick; // gap between ticks
+    this.minutesPerBigTick = pixelPerBigTick; // every 5 minutes for big tick
 
     // Initialize properties
     this.isDragging = false;
@@ -98,10 +105,11 @@ class TimeRuler {
     this.lastPosition = e.clientX;
     this.lastMoveTime = Date.now(); // Update last move time
 
+    // Move the ruler
     rulerThumb.style.left = `${this.snapToInterval(newLeft)}px`;
-    this.updateTimeDisplay(
-      this.scaleLimit - Math.round(newLeft / this.pixelsPerTick),
-    );
+    // Set the time base on the thumb's position
+    time = this.scaleLimit - Math.round(newLeft / this.pixelsPerTick);
+    updateDigitalTimer(time);
   }
 
   onMouseUp() {
@@ -120,10 +128,6 @@ class TimeRuler {
     if (this.velocity !== 0) {
       this.applyMomentum();
     }
-  }
-
-  showPosition(position) {
-    console.log(position);
   }
 
   snapToInterval(position) {
@@ -153,10 +157,11 @@ class TimeRuler {
         return;
       }
 
+      // Move the ruler
       this.rulerThumb.style.left = `${this.snapToInterval(newLeft)}px`;
-      this.updateTimeDisplay(
-        this.scaleLimit - Math.round(newLeft / this.pixelsPerTick),
-      );
+      // Set the time base on the thumb's position
+      time = this.scaleLimit - Math.round(newLeft / this.pixelsPerTick);
+      updateDigitalTimer(time);
 
       // Stop the interval if the velocity is very low (thumb is nearly stationary)
       if (Math.abs(this.velocity) < 0.5) {
@@ -165,20 +170,10 @@ class TimeRuler {
     }, 16); // Update every ~16ms (60 frames per second)
   }
 
-  updateTimeDisplay(minutes) {
-    timeDisplay.textContent = this.formatTime(minutes);
-  }
-
-  formatTime(minutes) {
-    const hrs = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}`;
+  countDown() {
+    const currentLeft = parseFloat(this.rulerThumb.style.left) || 0;
+    const newLeft = currentLeft + this.pixelsPerTick / 60;
+    this.rulerThumb.style.left = `${newLeft}px`;
+    console.log(newLeft);
   }
 }
-
-// Khởi tạo TimeRuler
-const rulerDividerPanel = document.querySelector(".ruler-divider-panel");
-const rulerThumb = document.querySelector(".ruler-thumb");
-const rulerTrack = document.querySelector(".ruler-track");
-const timeRuler = new TimeRuler(rulerDividerPanel, rulerThumb, rulerTrack, 60); // 30 minutes scale
-const timeDisplay = document.getElementById("time-display");
