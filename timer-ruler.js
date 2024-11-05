@@ -170,9 +170,12 @@ class TimeRuler {
     }, 16); // Update every ~16ms (60 frames per second)
   }
 
-  countDown() {
-    const currentLeft = parseFloat(this.rulerThumb.style.left) || 0;
-    const newLeft = currentLeft + this.pixelsPerTick / 60;
+  updateRulerPosition() {
+    const thumbWidth = parseFloat(this.rulerDividerPanel.style.width);
+    const newLeft =
+      (this.pixelsPerTick / 60) *
+      ((thumbWidth / this.pixelsPerTick) * 60 - timeInSeconds);
     this.rulerThumb.style.left = `${newLeft}px`;
+    console.log(newLeft);
   }
 }

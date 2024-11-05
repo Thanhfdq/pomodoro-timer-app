@@ -1,4 +1,5 @@
 // GET UI ELEMENTS
+const modeButtons = document.querySelectorAll(".mode-buttons button");
 const rulerDividerPanel = document.querySelector(".ruler-divider-panel");
 const rulerThumb = document.querySelector(".ruler-thumb");
 const rulerTrack = document.querySelector(".ruler-track");
@@ -10,9 +11,12 @@ const startStopSound = document.getElementById("start-stop-sound");
 // DEFAULT SETTINGS VALUE
 //time (minutes)
 let pomodoroTime = 25;
-let shortBreakTime = 5;
+let shortBreakTime = 0.5;
 let longBreakTime = 15;
 let longBreakInterval = 2; // Number of pomodoro before a long break
+//auto
+let auto_start_break = false;
+let auto_start_pomodoro = false;
 
 // CALCULATION VARIABLES
 let timeInSeconds = pomodoroTime * 60; // Clock countdown the pomodoro first by default
@@ -23,6 +27,40 @@ let currentMode = 0; // 0 is pomodoro, 1 is short break, and 2 is long break
 let passedPomodoros = 0; // count the number of pomodoros have completed
 
 startPauseButton.addEventListener("click", startTimer);
+modeButtons.forEach((button) => {
+  button.addEventListener("click", function () {
+    setActiveMode(this);
+
+    switch (this.textContent) {
+      case "Pomodoro":
+        currentMode = 0;
+        timeInSeconds = pomodoroTime * 60;
+        break;
+      case "Short Break":
+        currentMode = 1;
+        timeInSeconds = shortBreakTime * 60;
+        break;
+      case "Long Break":
+        currentMode = 2;
+        timeInSeconds = longBreakTime * 60;
+        break;
+    }
+    checkAutoStartTimer();
+    updateTimer();
+  });
+});
+function updateModeButtons() {
+  modeButtons.forEach((button) => {
+    button.classList.remove("active");
+    if (
+      (currentMode === 0 && button.textContent === "Pomodoro") ||
+      (currentMode === 1 && button.textContent === "Short Break") ||
+      (currentMode === 2 && button.textContent === "Long Break")
+    ) {
+      button.classList.add("active");
+    }
+  });
+}
 
 // Khởi tạo TimeRuler
 const timeRuler = new TimeRuler(
@@ -30,7 +68,7 @@ const timeRuler = new TimeRuler(
   rulerThumb,
   rulerTrack,
   pomodoroTime,
-  20,
+  40,
   5,
 ); // 30 minutes scale
 
@@ -52,7 +90,6 @@ function startTimer() {
         if (passedPomodoros == longBreakInterval && currentMode != 2) {
           passedPomodoros = 0;
         }
-        updateDataDisplay();
       }
       //update timer every second
       updateTimer();
@@ -66,10 +103,26 @@ function stopTimer() {
   updateButton();
 }
 
+function checkAutoStartTimer() {
+  if (currentMode == 0) {
+    if (auto_start_pomodoro) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+  } else {
+    if (auto_start_break) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+  }
+}
+
 // To update the timer display (every second)
 function updateTimer() {
   updateDigitalTimer(timeInSeconds);
-  timeRuler.countDown();
+  timeRuler.updateRulerPosition();
 }
 
 // To update button functionality based on state
@@ -116,17 +169,22 @@ function changeMode() {
     passedPomodoros++;
     if (passedPomodoros < longBreakInterval) {
       currentMode = 1;
-      time = shortBreakTime;
-      currentCountTime = shortBreakTime;
+      timeInSeconds = shortBreakTime * 60;
     } else {
       currentMode = 2;
-      time = longBreakTime;
-      currentCountTime = longBreakTime;
+      timeInSeconds = longBreakTime * 60;
     }
   } else {
     // after a break
     currentMode = 0;
-    time = pomodoroTime;
-    currentCountTime = pomodoroTime;
+    timeInSeconds = pomodoroTime * 60;
   }
+  updateModeButtons();
+}
+
+function setActiveMode(clickedButton) {
+  modeButtons.forEach((button) => {
+    button.classList.remove("active");
+  });
+  clickedButton.classList.add("active");
 }
